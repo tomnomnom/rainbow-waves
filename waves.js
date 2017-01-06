@@ -1,6 +1,6 @@
 function waves(elem){
 
-    var bgColor = 'rgba(0, 0, 0, 0.01)';
+    var bgColor = 'hsla(0, 0%, 0%, 0.04)';
     var baseFreq = 2;
 
     var width = elem.width;
@@ -12,13 +12,13 @@ function waves(elem){
         return (
             Math.sin(n) +
             Math.sin(n*3)/3 +
-            Math.sin(n*5)/5
+            Math.sin(n*5)/5 +
+            Math.sin(n*7)/7
         );
     };
 
     var waves = [
-        {frac: 0, step: 0.002, fn: square},
-        {frac: 0, step: 0.002, fn: function(n){ n+=Math.PI; return square(n); }},
+        {frac: 0, step: 0.002, fn: square}
     ];
 
     // Main draw loop
@@ -63,7 +63,7 @@ function waves(elem){
         c.arc(x, y, 5, 0, 2 * Math.PI);
 
         var hue = w.frac*360;
-        var color = 'hsla('+hue+',80%, 50%, 0.9)';
+        var color = 'hsla('+hue+', 80%, 50%, 0.9)';
         c.shadowBlur = 20;
         c.shadowColor = color;
         c.fillStyle = color;
