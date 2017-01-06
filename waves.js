@@ -1,6 +1,6 @@
 function waves(elem){
 
-    var bgColor = 'hsla(0, 0%, 0%, 0.04)';
+    var bgColor = 'hsla(0, 0%, 0%, 0.02)';
     var baseFreq = 2;
 
     var width = elem.width;
