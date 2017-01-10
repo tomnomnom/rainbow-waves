@@ -1,6 +1,6 @@
 function waves(elem){
 
-    var bgColor = 'hsla(0, 0%, 0%, 0.02)';
+    var bgColor = 'hsla(0, 0%, 0%, 1)';
     var baseFreq = 2;
 
     var width = elem.width;
@@ -18,7 +18,7 @@ function waves(elem){
     };
 
     var waves = [
-        {frac: 0, step: 0.002, fn: square}
+        {frac: 0, step: 0.002, tail: 100, dots: [], fn: square}
     ];
 
     // Main draw loop
@@ -32,6 +32,7 @@ function waves(elem){
         // Draw waves
         for (var i = 0; i < waves.length; i++){
             var w = waves[i];
+
             drawWave(c, w);
 
             // Update wave state
@@ -39,6 +40,7 @@ function waves(elem){
             if (w.frac > (1+w.step)){
                 w.frac = 0;
             }
+
         }
 
         // Next frame
@@ -56,20 +58,32 @@ function waves(elem){
     function drawWave(c, w){
         c.save();
         c.translate(0, height/2);
-        c.beginPath();
+        c.shadowBlur = 30;
 
-        var x = w.frac*width;
-        var y = w.fn(w.frac*2*Math.PI*baseFreq) * (height*0.9/2);
-        c.arc(x, y, 5, 0, 2 * Math.PI);
+        // Add a dot, remove a dot
+        w.dots.unshift(w.frac);
+        if (w.dots.length > w.tail){
+            w.dots.pop();
+        }
 
-        var hue = w.frac*360;
-        var color = 'hsla('+hue+', 80%, 50%, 0.9)';
-        c.shadowBlur = 20;
-        c.shadowColor = color;
-        c.fillStyle = color;
-        c.fill();
+        // Draw all the dots
+        for (var i = 0; i < w.dots.length; i++){
+            var f = w.dots[i];
 
-        c.closePath();
+            var x = f*width;
+            var y = w.fn(f*2*Math.PI*baseFreq) * (height*0.9/2);
+            var hue = f*360;
+            var alpha = 1 - (i/w.dots.length);
+            var color = 'hsla('+hue+', 80%, 50%, '+alpha+')';
+
+            c.beginPath();
+            c.arc(x, y, 5, 0, 2 * Math.PI);
+            c.shadowColor = color;
+            c.fillStyle = color;
+            c.fill();
+            c.closePath();
+        }
+
         c.restore();
     }
 
